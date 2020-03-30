@@ -1,0 +1,4 @@
+Sensor temperatura y humedad ambiental:
+self._pin = 13
+Arduino:
+USB.0
