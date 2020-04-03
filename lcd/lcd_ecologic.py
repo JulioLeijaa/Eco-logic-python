@@ -5,10 +5,11 @@ class lcd_ecologic:
     def __init__(self):
         self.display = lcd()
     
-    def imprimirPantalla(self, humedad, temperatura, humedadplantas, fecha):
+    def imprimirPantalla(self, humedad, temperatura, humedadplantas, ldr, fecha):
         phum = '  Hum. '+str(humedad) +' %'
         ptem = '  Temp. '+str(temperatura)+' C'
         phumplan = ' Humedad '+str(humedadplantas)+' %'
+        pldr = ' Sombra  ' +str(ldr)+ ' %'
         dia = fecha[0:11]
         idia = 'Fecha '+fecha
         hora = fecha[12:20]
@@ -36,6 +37,7 @@ class lcd_ecologic:
         time.sleep(3)
         self.display.lcd_clear()
         self.display.lcd_display_string(phumplan, 1)
+        self.display.lcd_display_string(pldr, 2)
         time.sleep(3)
     
     def limpiarPantalla(self):

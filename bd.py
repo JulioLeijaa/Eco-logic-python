@@ -21,10 +21,8 @@ class Mongo:
         except pymongo.errors.ConnectionFailure as error:
             print ('Could not connect to MongoDB: %s' % error)
         
-    def insertarDatos(self, temperatura, humedad, humedadPlanta, fecha):
+    def insertarDatos(self, temperatura, humedad, humedadPlanta, ldr, fecha):
         c = self._coleccion.find()
-        d = self._coleccion.insert({"_id":c.count()+1,"temperatura":temperatura,"humedad":humedad, "humedad_planta":humedadPlanta,"fecha":fecha})
+        d = self._coleccion.insert({"_id":c.count()+1,"temperatura":temperatura,"humedad":humedad, "humedad_planta":humedadPlanta, "ldr":ldr, "fecha":fecha})
         #print(str(d))
-        
-
         

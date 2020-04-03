@@ -24,3 +24,6 @@ class Adafruit:
         print('Publicando {0} en Humedadplanta.'.format(humedadplanta))
         self.client.publish('Humedadplantas', humedadplanta)
         
+    def publicarLDR(self, ldr):
+        print('Publicando {0} en LDR.'.format(ldr))
+        self.client.publish('LDR', ldr)

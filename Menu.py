@@ -17,11 +17,12 @@ class Menu:
     def leerSensorTyH(self):
         try:
             self._sensor.lectura()
-            self._mongo.insertarDatos(self._sensor.getTemperatura(),self._sensor.getHumedad(), self._sensor.getHumedadPlanta(), self._sensor.getFecha())
+            self._mongo.insertarDatos(self._sensor.getTemperatura(),self._sensor.getHumedad(), self._sensor.getHumedadPlanta(), self._sensor.getLDR(), self._sensor.getFecha())
             self._led.encenderLED(self._sensor.getHumedadPlanta())
             print()
-            print('Temperatura={0:0.1f}* Humedad={1:0.1f}%'.format(self._sensor.getTemperatura(), self._sensor.getHumedad()))
+            print('Temperatura={0:0.1f}° Humedad={1:0.1f}%'.format(self._sensor.getTemperatura(), self._sensor.getHumedad()))
             print('Humedad_planta={0}'.format(self._sensor.getHumedadPlanta()))
+            print('LDR={0}'.format(self._sensor.getLDR()))
             print('Fecha={0}'.format(self._sensor.getFecha()))
         except:
             sys.exit(1)
@@ -30,9 +31,10 @@ class Menu:
         self._adafruit.publicarHumedad(self._sensor.getHumedad())
         self._adafruit.publicarTemperatura(self._sensor.getTemperatura())
         self._adafruit.publicarHumedadPlanta(self._sensor.getHumedadPlanta())
+        self._adafruit.publicarLDR(self._sensor.getLDR())
         
     def imprimeDatos(self):
-        self._lcd.imprimirPantalla(self._sensor.getHumedad(), self._sensor.getTemperatura(), self._sensor.getHumedadPlanta(), self._sensor.getFecha())
+        self._lcd.imprimirPantalla(self._sensor.getHumedad(), self._sensor.getTemperatura(), self._sensor.getHumedadPlanta(), self._sensor.getLDR(), self._sensor.getFecha())
         
     def run(self):
         try:
