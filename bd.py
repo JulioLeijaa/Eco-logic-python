@@ -1,6 +1,5 @@
 import pymongo
 
-
 class Mongo:
     def __init__(self):
         
@@ -14,7 +13,7 @@ class Mongo:
             self._client = pymongo.MongoClient(URI_CONNECTION)
             print ('OK -- Connected to MongoDB at server %s' % (MONGODB_HOST))
             self._db = self._client['Ecologic']
-            self._coleccion = self._db['Datos']
+            self._coleccion = self._db['Sensores']
             
         except pymongo.errors.ServerSelectionTimeoutError as error:
             print ('Error with MongoDB connection: %s' % error)
@@ -24,5 +23,9 @@ class Mongo:
     def insertarDatos(self, temperatura, humedad, humedadPlanta, ldr, fecha):
         c = self._coleccion.find()
         d = self._coleccion.insert({"_id":c.count()+1,"temperatura":temperatura,"humedad":humedad, "humedad_planta":humedadPlanta, "ldr":ldr, "fecha":fecha})
-        #print(str(d))
+
+    def consultarCantidadRegistros(self):
+        c = self._coleccion.count()
+        if c >= 500:
+            d = self._coleccion.remove()
         

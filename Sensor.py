@@ -15,8 +15,7 @@ class Sensor:
         now = datetime.now() #se declara objeto de fecha
         self._fecha = now.strftime("%Y-%m-%d (%H:%M:%S)") #formato de la fecha #print(self._fecha)
         self._humedad, self._temperatura = Adafruit_DHT.read_retry(self._sensor, self._pin) #lectura de temperatura y humedad #print(self._temperatura)
-        lectura = self._arduino.readline() #lectura de arduino por USB0
-        print(lectura)
+        lectura = self._arduino.readline() #lectura de arduino por USB0 #print(lectura)
         data = json.loads(lectura) #codificación a json #print(data)
         self._humedadPlanta = int(data["hum"]) #print(self._humedadPlanta)
         self._humedadPlanta = float(self._humedadPlanta /10) #print(self._humedadPlanta)

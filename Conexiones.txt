@@ -2,3 +2,15 @@ Sensor temperatura y humedad ambiental:
 self._pin = 13
 Arduino:
 USB.0
+Sensor humedad de suelo:
+A0
+LDR:
+A4
+LEDS:
+self._pinRojo = 20
+self._pinVerde =21
+Bomba:
+self._pin = 06
+LCD:
+SDA = SDA
+SCL = SCL

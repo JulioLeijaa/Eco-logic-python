@@ -14,15 +14,12 @@ class Menu:
         self._lcd = lcd_ecologic()
         self._led = LED()
     
-    def leerSensorTyH(self):
+    def leerSensores(self):
         try:
             self._sensor.lectura()
-            self._mongo.insertarDatos(self._sensor.getTemperatura(),self._sensor.getHumedad(), self._sensor.getHumedadPlanta(), self._sensor.getLDR(), self._sensor.getFecha())
-            self._led.encenderLED(self._sensor.getHumedadPlanta())
             print()
             print('Temperatura={0:0.1f}° Humedad={1:0.1f}%'.format(self._sensor.getTemperatura(), self._sensor.getHumedad()))
-            print('Humedad_planta={0}'.format(self._sensor.getHumedadPlanta()))
-            print('LDR={0}'.format(self._sensor.getLDR()))
+            print('Humedad_planta={0} LDR={1}'.format(self._sensor.getHumedadPlanta(), self._sensor.getLDR()))
             print('Fecha={0}'.format(self._sensor.getFecha()))
         except:
             sys.exit(1)
@@ -34,19 +31,25 @@ class Menu:
         self._adafruit.publicarLDR(self._sensor.getLDR())
         
     def imprimeDatos(self):
+        self._led.encenderLED(self._sensor.getHumedadPlanta())
         self._lcd.imprimirPantalla(self._sensor.getHumedad(), self._sensor.getTemperatura(), self._sensor.getHumedadPlanta(), self._sensor.getLDR(), self._sensor.getFecha())
+        
+    def guardaDatos(self):
+        self._mongo.consultarCantidadRegistros()
+        self._mongo.insertarDatos(self._sensor.getTemperatura(),self._sensor.getHumedad(), self._sensor.getHumedadPlanta(), self._sensor.getLDR(), self._sensor.getFecha())
         
     def run(self):
         try:
             while True:
-                self.leerSensorTyH()
+                self.leerSensores()
+                self.guardaDatos()
                 self.publicaDatos()
                 self.imprimeDatos()
                 time.sleep(10)
             else:
                 print("Tiempo excedido")
-
         except KeyboardInterrupt:
             print('Pantalla limpiada')
             self._lcd.limpiarPantalla()
+            print('LEDs limpiados')
             self._led.limpiarLED()
