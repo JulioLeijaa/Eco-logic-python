@@ -5,11 +5,10 @@ class Menu:
     def __init__(self):
         self.adafruit = Adafruit()
 
-    def haceSubscipciones(self):
-        while True:
-            self.adafruit.subBomba()
-            self.adafruit.subBombaTiempo()
-            #time.sleep(1)
-
-main = Menu()
-main.haceSubscipciones()
+    def run(self):
+        try:
+            while True:
+                self.adafruit.subBomba()
+                self.adafruit.subBombaTiempo()
+        except KeyboardInterrupt:
+            print('Ejecución detenida')

@@ -1,4 +1,5 @@
 from Adafruit_IO import Client
+from bd import Mongo
 import sys
 import RPi.GPIO as GPIO
 import time
@@ -11,6 +12,7 @@ class Adafruit:
         GPIO.setup(self._pinBomba, GPIO.OUT)
         GPIO.setwarnings(False)
         GPIO.output(self._pinBomba, GPIO.LOW)
+        self._mongo = Mongo()
         
     def subBomba(self):
         try:
@@ -21,6 +23,8 @@ class Adafruit:
                 time.sleep(10)
                 GPIO.output(self._pinBomba, GPIO.LOW)
                 self.aio.send_data('bomba','OFF')
+                self._mongo.consultarCantidadRegistros()
+                self._mongo.insertarDatos(10)
                 print('Se envió OFF a Adafruit')
             #elif data.value == 'OFF':
                 #print("El valor es {0}".format(data.value))
@@ -39,7 +43,8 @@ class Adafruit:
                 time.sleep(seg)
                 GPIO.output(self._pinBomba, GPIO.LOW)
                 self.aio.send_data('bombatiempo','0')
-                #self.aio.send_data('bomba','OFF')
+                self._mongo.consultarCantidadRegistros()
+                self._mongo.insertarDatos(seg)
                 print('Se envió 0 a Adafruit')
             #elif int(data.value) < 10:
                 #print('El valor debe ser mayor a 10')
