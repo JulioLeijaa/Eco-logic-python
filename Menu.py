@@ -5,6 +5,7 @@ from Sensor import Sensor
 from Adafruit import Adafruit
 from lcd.lcd_ecologic import lcd_ecologic
 from LED import LED
+from Firebase import Firebase
 
 class Menu:
     def __init__(self):
@@ -13,6 +14,7 @@ class Menu:
         self._adafruit = Adafruit()
         self._lcd = lcd_ecologic()
         self._led = LED()
+        self._firebase  = Firebase()
     
     def leerSensores(self):
         try:
@@ -29,6 +31,7 @@ class Menu:
         self._adafruit.publicarTemperatura(self._sensor.getTemperatura())
         self._adafruit.publicarHumedadPlanta(self._sensor.getHumedadPlanta())
         self._adafruit.publicarLDR(self._sensor.getLDR())
+        self._firebase.insertaSensores(self._sensor.getTemperatura(), self._sensor.getHumedad(), self._sensor.getLDR(), self._sensor.getHumedadPlanta(), self._sensor.getFecha())
         
     def imprimeDatos(self):
         self._led.encenderLED(self._sensor.getHumedadPlanta())

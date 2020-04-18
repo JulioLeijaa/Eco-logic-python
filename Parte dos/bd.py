@@ -1,6 +1,5 @@
 import pymongo
-import time
-from datetime import datetime
+
 
 class Mongo:
     def __init__(self):
@@ -22,11 +21,9 @@ class Mongo:
         except pymongo.errors.ConnectionFailure as error:
             print ('Could not connect to MongoDB: %s' % error)
             
-    def insertarDatos(self, segundos):
-        now = datetime.now() #se declara objeto de fecha
-        self._fecha = now.strftime("%Y-%m-%d (%H:%M:%S)") #formato de la fecha #print(self._fecha)
+    def insertarDatos(self, segundos, fecha):
         c = self._coleccion.find()
-        d = self._coleccion.insert({"_id":c.count()+1,"segundos":segundos, "fecha":self._fecha})
+        d = self._coleccion.insert({"_id":c.count()+1,"segundos":segundos, "fecha":fecha})
         
     def consultarCantidadRegistros(self):
         c = self._coleccion.count()

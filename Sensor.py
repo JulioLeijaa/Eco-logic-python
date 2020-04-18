@@ -3,6 +3,7 @@ import time
 import simplejson as json
 import Adafruit_DHT
 from datetime import datetime
+import random
 
 class Sensor:
     
@@ -17,8 +18,9 @@ class Sensor:
         self._humedad, self._temperatura = Adafruit_DHT.read_retry(self._sensor, self._pin) #lectura de temperatura y humedad #print(self._temperatura)
         lectura = self._arduino.readline() #lectura de arduino por USB0 #print(lectura)
         data = json.loads(lectura) #codificación a json #print(data)
-        self._humedadPlanta = int(data["hum"]) #print(self._humedadPlanta)
-        self._humedadPlanta = float(self._humedadPlanta /10) #print(self._humedadPlanta)
+        #self._humedadPlanta = int(data["hum"]) #print(self._humedadPlanta)
+        #self._humedadPlanta = float(self._humedadPlanta /10) #print(self._humedadPlanta)
+        self._humedadPlanta = round(random.uniform(24.0, 60.0), 1)
         self._ldr = int(data["ldr"]) #print(self._ldr)
         self._ldr = float(self._ldr /10) #print(self._ldr)
         

@@ -3,6 +3,9 @@ from bd import Mongo
 import sys
 import RPi.GPIO as GPIO
 import time
+from Firebase import Firebase
+import time
+from datetime import datetime
 
 class Adafruit:
     def __init__(self):
@@ -11,20 +14,23 @@ class Adafruit:
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self._pinBomba, GPIO.OUT)
         GPIO.setwarnings(False)
-        GPIO.output(self._pinBomba, GPIO.LOW)
         self._mongo = Mongo()
+        self._firebase = Firebase()
         
     def subBomba(self):
         try:
             data = self.aio.receive('bomba')
             if data.value == 'ON':
                 print("El valor es: {0} (10 segundos)".format(data.value))
-                GPIO.output(self._pinBomba, GPIO.HIGH)
-                time.sleep(10)
                 GPIO.output(self._pinBomba, GPIO.LOW)
+                time.sleep(10)
+                GPIO.output(self._pinBomba, GPIO.HIGH)
                 self.aio.send_data('bomba','OFF')
                 self._mongo.consultarCantidadRegistros()
-                self._mongo.insertarDatos(10)
+                now = datetime.now() #se declara objeto de fecha
+                self._fecha = now.strftime("%Y-%m-%d (%H:%M:%S)") #formato de la fecha #print(self._fecha)
+                self._mongo.insertarDatos(10, self._fecha)
+                self._firebase.insertaBomba(10, self._fecha)
                 print('Se envió OFF a Adafruit')
             #elif data.value == 'OFF':
                 #print("El valor es {0}".format(data.value))
@@ -39,12 +45,15 @@ class Adafruit:
             if int(data.value) >= 10:
                 print("El valor es: {0} segundos".format(data.value))
                 seg = int(data.value)
-                GPIO.output(self._pinBomba, GPIO.HIGH)
-                time.sleep(seg)
                 GPIO.output(self._pinBomba, GPIO.LOW)
+                time.sleep(seg)
+                GPIO.output(self._pinBomba, GPIO.HIGH)
                 self.aio.send_data('bombatiempo','0')
                 self._mongo.consultarCantidadRegistros()
-                self._mongo.insertarDatos(seg)
+                now = datetime.now() #se declara objeto de fecha
+                self._fecha = now.strftime("%Y-%m-%d (%H:%M:%S)") #formato de la fecha #print(self._fecha)
+                self._mongo.insertarDatos(seg, self._fecha)
+                self._firebase.insertaBomba(seg, self._fecha)
                 print('Se envió 0 a Adafruit')
             #elif int(data.value) < 10:
                 #print('El valor debe ser mayor a 10')
